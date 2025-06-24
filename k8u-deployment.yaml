@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejsdeploy-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nodejsdeploy
+  template:
+    metadata:
+      labels:
+        app: nodejsdeploy
+    spec:
+      containers:
+        - name: nodejsdeploy
+          image: himanshu19660/mynodejsappliction:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+      imagePullSecrets:
+        - name: regcred  # Make sure this DockerHub secret exists in your namespace
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejsdeploy-service
+spec:
+  selector:
+    app: nodejsdeploy
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
