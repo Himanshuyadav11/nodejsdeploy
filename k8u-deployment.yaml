@@ -20,12 +20,10 @@ spec:
     spec:
       containers:
         - name: nodejsdeploy
-          image: himanshu19660/mynodejsapplication:latest
+          image: himanshu19660/mynodejsappliction:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
-      imagePullSecrets:
-        - name: dockerhub-secret
 ---
 apiVersion: v1
 kind: Service
