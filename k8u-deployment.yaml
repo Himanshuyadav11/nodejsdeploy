@@ -35,6 +35,7 @@ spec:
     app: nodejsdeploy
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 3000
-  type: LoadBalancer
+      port: 80              # internal cluster service port
+      targetPort: 3000      # matches containerPort
+      nodePort: 30080       # fixed external port
+  type: NodePort
