@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nodejsdeploy-deployment
+  namespace: nodejsweb
 spec:
   replicas: 2
   selector:
@@ -14,17 +15,18 @@ spec:
     spec:
       containers:
         - name: nodejsdeploy
-          image: himanshu19660/mynodejsappliction:latest
+          image: himanshu19660/mynodejsapplication:latest  # ✅ corrected spelling
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
       imagePullSecrets:
-        - name: regcred  # Make sure this DockerHub secret exists in your namespace
+        - name: dockerhub-secret   # ✅ use your actual secret name
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: nodejsdeploy-service
+  namespace: nodejsweb
 spec:
   selector:
     app: nodejsdeploy
