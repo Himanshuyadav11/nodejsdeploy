@@ -44,10 +44,11 @@ metadata:
   name: nodejs-service
   namespace: nodejsweb
 spec:
+  type: NodePort
   selector:
     app: nodejsdeploy
   ports:
     - protocol: TCP
       port: 80
       targetPort: 3000
-  type: LoadBalancer
+      nodePort: 30081
