@@ -1,12 +1,16 @@
 {
-  "name": "simple-node-web-app",
+  "name": "nodejs-deploy-app",
   "version": "1.0.0",
-  "description": "A simple Node.js web app for DevOps testing",
+  "description": "A stylish Node.js app deployed using Jenkins, Docker, and Kubernetes",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "echo \"No tests specified\" && exit 0"
   },
+  "author": "Himanshu Yadav",
+  "license": "MIT",
   "dependencies": {
-    "express": "^4.18.4"
+    "express": "^4.18.2",
+    "morgan": "^1.10.0"
   }
 }
