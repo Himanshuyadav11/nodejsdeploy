@@ -36,6 +36,8 @@ spec:
             port: 3000
           initialDelaySeconds: 5
           periodSeconds: 10
+      imagePullSecrets:
+        - name: my-docker-secret
 
 ---
 apiVersion: v1
