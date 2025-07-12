@@ -17,7 +17,7 @@ pipeline {
         stage('Git Checkout') {
             steps {
                 git branch: 'main',
-                    credentialsId: 'git_secrat',
+                    credentialsId: 'git_acces-tocken',
                     url: 'https://github.com/Himanshuyadav11/nodejsdeploy.git'
             }
         }
@@ -57,7 +57,7 @@ pipeline {
         stage('Docker Build & Push') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                    withDockerRegistry(credentialsId: 'docker-tocken', toolName: 'docker') {
                         sh "docker build -t $DOCKER_IMAGE ."
                         sh "docker push $DOCKER_IMAGE"
                     }
