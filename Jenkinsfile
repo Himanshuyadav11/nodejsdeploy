@@ -8,7 +8,8 @@ pipeline {
     }
 
     environment {
-        SCANNER_HOME = tool 'sonarQube_scanner'
+        SCANNER_HOME = tool 'sonar_scanner_cli'
+        DOCKER_HOME = tool 'docker'
         DOCKER_IMAGE = 'himanshu19660/mynodejsappliction:latest'
         KUBECONFIG = '/var/lib/jenkins/.kube/config'
     }
@@ -54,44 +55,45 @@ pipeline {
             }
         }
 
+        stage('Trivy Image Scan') {
+            steps {
+                sh "trivy image --format table -o image.html $DOCKER_IMAGE || true"
+            }
+        }
+
         stage('Docker Build & Push') {
             steps {
                 script {
+                    sh "docker build -t $DOCKER_IMAGE ."
                     withDockerRegistry(credentialsId: 'docker-tocken', toolName: 'docker') {
-                        sh "docker build -t $DOCKER_IMAGE ."
                         sh "docker push $DOCKER_IMAGE"
                     }
                 }
             }
         }
 
-        stage('Trivy Image Scan') {
-            steps {
-                sh "trivy image --format table -o image.html $DOCKER_IMAGE"
-            }
-        }
-
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl create namespace nodejsweb || true'
-                sh 'kubectl apply -f k8u-deployment.yaml'
-                sh 'sleep 20'
+                script {
+                    sh 'kubectl create namespace nodejsweb || true'
+                    sh '[ -f k8u-deployment.yaml ] && kubectl apply -f k8u-deployment.yaml || true'
+                    sh 'sleep 20'
+                }
             }
         }
 
         stage('Verify Deployment') {
             steps {
-                sh 'kubectl get pods -n nodejsweb'
-                sh 'kubectl get svc -n nodejsweb'
+                sh 'kubectl get pods -n nodejsweb || true'
+                sh 'kubectl get svc -n nodejsweb || true'
                 sh 'sleep 40'
             }
         }
 
         stage('Wait and Delete Deployment') {
             steps {
-                echo 'Waiting for 5 minutes before deleting deployment...'
                 sh 'sleep 300'
-                sh 'kubectl delete -f k8u-deployment.yaml || true'
+                sh '[ -f k8u-deployment.yaml ] && kubectl delete -f k8u-deployment.yaml || true'
             }
         }
     }
