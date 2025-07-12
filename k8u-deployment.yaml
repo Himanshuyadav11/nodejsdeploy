@@ -20,24 +20,24 @@ spec:
         app: nodejsdeploy
     spec:
       containers:
-      - name: nodejs-app
-        image: himanshu19660/mynodejsappliction:latest
-        ports:
-        - containerPort: 3000
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 10
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 10
+        - name: nodejs-app
+          image: himanshu19660/mynodejsappliction:latest
+          ports:
+            - containerPort: 3000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
       imagePullSecrets:
-        - name: my-docker-secret
+        - name: docker-hub-secret
 
 ---
 apiVersion: v1
